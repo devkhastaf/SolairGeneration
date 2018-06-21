@@ -1,0 +1,24 @@
+$highliht1 : #fdc33e;
+$highliht2 : #f9a11b;
+$highliht3 : #ff7761;
+$white : #ffffff;
+$light : #f5f5f5;
+$dark : #284555;
+$blue: #65c2ed;
+$blue-hover: #5aaed5;
+
+// Mobile Variables
+$mobile-menu-background-color : $blue;
+$mobile-menu-background-hover : $blue-hover;
+$mobile-border: 1px solid rgba(255, 255, 255, 0.2);
+$dimmer-color : rgba(0, 0, 0, 0.7);
+// Body
+$body-bg: #f5f8fa;
+
+// Typography
+$font-family-sans-serif: "Raleway", sans-serif;
+$font-size-base: 0.9rem;
+$line-height-base: 1.6;
+
+// Responsive Break Point
+$mobile: "max-width:767px";

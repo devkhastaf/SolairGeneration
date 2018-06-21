@@ -1,0 +1,45 @@
+.list-products {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  grid-column-gap: 40px;
+  .side-bar {
+    background-color: $white;
+    input  {
+      display: block;
+    }
+  }
+  .grid-products {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+    .column {
+      padding: 0 .5rem;
+      padding-bottom: 2rem;
+      padding-top: 2rem;
+      .price {
+        color: $highliht2;
+        font-weight: 700;
+      }
+      h4 {
+        margin-bottom: 1rem;
+        margin-top: 1rem;
+        font-weight: 500;
+      }
+      a {
+        text-decoration: none;
+        color: $dark;
+        &:hover {
+          color: $highliht3;
+        }
+      }
+      .rating {
+        margin-bottom: 1rem;
+        i {
+          color: $highliht2;
+        }
+      }
+    }
+  }
+}

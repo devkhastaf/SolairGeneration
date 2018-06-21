@@ -1,0 +1,61 @@
+.footer {
+  background-color: $dark;
+  color: $white;
+  .nav-footer {
+    display: flex;
+    flex-wrap: wrap;
+    .column {
+      flex: 1;
+      flex-basis: 15%;
+      background-color: $dark;
+      color: $white;
+      ul {
+        list-style: none;
+        padding-left: 0;
+        li{
+          margin-bottom: .5rem;
+          a {
+            text-decoration: none;
+            color: $white;
+            padding-bottom: .8rem;
+            width: auto;
+          }
+        }
+      }
+    }
+    .newslater {
+      flex: 2;
+      flex-basis: 30%;
+      margin-top: 2rem;
+      padding: 0 .5rem;
+      height: 10rem;
+      background-color: #356078;
+      input {
+        margin-top: .2rem;
+      }
+    }
+  }
+  .copyright {
+    text-align: center;
+    padding: 1.75rem 0;
+  }
+  .footer-bottom {
+    display: flex;
+    .paiment {
+      flex: 2;
+      order: 1;
+      font-size: 2rem;
+      i {
+        font-family: "Font Awesome\ 5 Brands";
+        font-weight: 500;
+      }
+    }
+    .contact {
+      flex: 1;
+      order: 2;
+      i {
+        margin-bottom: .5rem;
+      }
+    }
+  }
+}

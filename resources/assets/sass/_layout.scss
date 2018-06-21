@@ -1,0 +1,66 @@
+body {
+  background-color: $light;
+}
+.wrapper-wide {
+  width: 90%;
+  margin: 0 auto;
+}
+.wrapper {
+  width: 85%;
+  margin: 0 auto;
+}
+.wrapper-skinny {
+  width: 60%;
+  margin: 0 auto;
+}
+.btn {
+  color: $dark;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 300;
+  padding: .5rem 1rem;
+  border: 2px $dark solid;
+  background: none;
+  &:hover {
+    color: $highliht3;
+    border: 2px $highliht3 solid;
+  }
+}
+.column {
+  color: $dark;
+  background-color: $white;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  img {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    height: auto;
+    display: block;
+    padding-bottom: 1rem;
+  }
+}
+
+/*input[type="text"], input[type="password"], input[type="email"] {
+  background-color: $dark;
+  width: 15rem;
+  color: $white;
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  border: none;
+}*/
+.container {
+  //padding: 3rem 0;
+}
+.btn-submit {
+
+}
+
+@media screen and ($mobile){
+  .column {
+    img {
+      width: 40%;
+    }
+  }
+}
+

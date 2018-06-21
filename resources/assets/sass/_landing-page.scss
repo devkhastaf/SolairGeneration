@@ -1,0 +1,122 @@
+.last-products {
+  padding: 2.5rem 0;
+  h2 {
+    color: $dark;
+    padding: auto 2rem;
+  }
+  .grid {
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 380px;
+    grid-column-gap: 40px;
+    .column {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12),
+      0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    }
+    .price {
+      color: $highliht2;
+      font-weight: 700;
+    }
+    a {
+      text-decoration: none;
+      color: $dark;
+      &:hover {
+        color: $highliht3;
+      }
+    }
+    .btn {
+      margin-top: 1rem;
+    }
+  }
+}
+.services {
+  margin-top: 4rem;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 40px;
+}
+.all-categories {
+  padding: 2.5rem 0;
+  .category-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 530px;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+    text-align: center;
+    h3 {
+      color: $highliht2;
+      text-align: center;
+    }
+    a {
+      display: block;
+      text-decoration: none;
+      color: $dark;
+      text-align: center;
+      padding-bottom: .8rem;
+      &:hover {
+        color: $highliht2;
+      }
+    }
+    .btn {
+      text-align: center;
+      display: inline !important;
+    }
+  }
+}
+.brands {
+  padding: 2.5rem 0;
+  .brands-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 150px;
+    grid-column-gap: 20px;
+    .column {
+      background-color: $light;
+      img {
+        width: 45%;
+        height: auto;
+      }
+    }
+  }
+}
+
+.slider {
+  background-color: $highliht3;
+  height: 400px;
+  padding: 0 auto;
+}
+
+@media screen and ($mobile){
+  .last-products {
+    .grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: 380px;
+      grid-auto-columns: 100px;
+      grid-column-gap: 40px;
+      grid-row-gap: 40px;
+    }
+  }
+  .services {
+    margin-top: 4rem;
+    text-align: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+  }
+  .all-categories {
+    .category-grid {
+      grid-template-columns: 1fr;
+      grid-row-gap: 40px;
+    }
+  }
+  .brands {
+    .brands-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-row-gap: 10px;
+    }
+  }
+}
