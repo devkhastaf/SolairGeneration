@@ -11,6 +11,10 @@ class Product extends Model
         return $this->belongsToMany('App\Category');
     }
 
+    public function featureds(){
+        return $this->belongsToMany('App\Featured');
+    }
+
     protected $fillable = ['name', 'slug', 'details', 'price', 'description'];
 
     public function presentPrice(){

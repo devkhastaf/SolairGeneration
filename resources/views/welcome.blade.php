@@ -26,7 +26,7 @@
         <div class="grid">
             @foreach($products as $product)
                 <div class="column">
-                    <img src="images/product.jpg" alt="product"/>
+                    <img src="{{ productImage($product->image) }}" alt="product"/>
                     <span  class="price">{{ $product->presentPrice() }}</span>
                     <a href="#"><h4 class="title">{{ $product->name }}</h4></a>
                     <a href="#" class="btn"><i class="fa fa-shopping-cart"></i> Add to cart</a>
@@ -60,102 +60,16 @@
     <div class="all-categories wrapper-wide">
         <h2>All Categories</h2>
         <div class="category-grid">
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
-            <div class="column">
-                <img src="images/product.jpg" alt="category">
-                <h3>Kit Solaires</h3>
-                <a href="#">Aliquam tincident</a>
-                <a href="#">Vivamus vestibulum</a>
-                <a href="#">Integer vitae libero</a>
-                <a href="#">Fusce pellentesque</a>
-                <a href="#">Ut aliquam</a>
-                <a href="#">Cras iaculis</a>
-                <a href="#">Donec quis dui</a>
-                <a href="#" class="btn">See more</a>
-            </div>
+            @foreach($categories as $category)
+                <div class="column">
+                    <img src="{{ categoryImage($category->image) }}" alt="category">
+                    <h3>{{ $category->name }}</h3>
+                    @foreach($category->subCategories() as $subCategory)
+                        <a href="{{ route('shop.index', ['category' => $subCategory->slug]) }}">{{ $subCategory->name }}</a>
+                    @endforeach
+                        <a href="{{ route('shop.index', ['category' => $category->slug]) }}" class="btn">See more</a>
+                </div>
+            @endforeach
         </div>
     </div>
     <div class="brands wrapper-wide">

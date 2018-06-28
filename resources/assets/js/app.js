@@ -17,6 +17,7 @@ window.Vue = require('vue');
 
 Vue.component('carousel', require('./components/Carousel.vue'));
 Vue.component('carouselSlide', require('./components/CarouselSlide.vue'));
+Vue.component('filters', require('./components/Filters.vue'));
 
 const app = new Vue({
     el: '#app'

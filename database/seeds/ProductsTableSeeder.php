@@ -64,7 +64,7 @@ class ProductsTableSeeder extends Seeder
             'price' => 2999,
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua.'
-        ]);
+        ])->categories()->attach(3);
 
         Product::create([
             'name' => 'Laptop 6',
@@ -74,7 +74,6 @@ class ProductsTableSeeder extends Seeder
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua.'
         ])->categories()->attach(5);
-
         Product::create([
             'name' => 'Laptop 7',
             'slug' => 'laptop7',
@@ -85,12 +84,12 @@ class ProductsTableSeeder extends Seeder
         ])->categories()->attach(4);
 
         Product::create([
-            'name' => 'Laptop 8',
-            'slug' => 'laptop8',
+            'name' => 'Desktop',
+            'slug' => 'desktop',
             'details' => '15 inch, 1TB SSD, 32GB RAM',
             'price' => 2999,
             'description' => 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua.'
-        ])->categories()->attach(3);
+        ])->categories()->attach(2);
     }
 }

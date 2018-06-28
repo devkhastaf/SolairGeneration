@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Featured;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -21,10 +22,14 @@ class ShopController extends Controller
             $products = Product::with('categories')->whereHas('categories', function ($query){
                 $query->where('slug', request()->category);
             });
+            $featureds = Featured::with('values')->whereHas('categories', function ($query){
+                $query->where('slug', request()->category);
+            })->get();
             $categoryName = optional($categories->where('slug', request()->category)->first())->name;
         }else {
             $products = Product::where('featured', true);
             $categoryName = 'Featured';
+            $featureds = '';
         }
 
         if(request()->sort == 'low_hight'){
@@ -34,11 +39,11 @@ class ShopController extends Controller
         }else {
             $products = $products->paginate($pagination);
         }
-
         return view('shop')->with([
             'products' => $products,
             'categories' => $categories,
             'categoryName' => $categoryName,
+            'featureds' => $featureds
         ]);
     }
 
@@ -107,4 +112,21 @@ class ShopController extends Controller
     {
         //
     }
+
+    /**
+     * Get all Filters.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function filters()
+    {
+        $category = Category::where('slug', request()->category)->first();
+        $filters = Featured::with('values')->whereHas('categories', function ($query){
+            $query->where('slug', request()->category);
+        })->get();
+        //dd($filters);
+        return response()->json($filters);
+    }
+
+
 }

@@ -6,6 +6,7 @@
     <link href="css/fontawesome-all.min.css" rel="stylesheet" />
     @yield('extra-css')
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 </head>
 <body>
     <div class="wrapper-wide" id="app">
@@ -102,6 +103,12 @@
         </div>
         <!-- End Footer-->
     </div>
+    <script>
+        window.Laravel = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'apiToken' => auth()->user()->api_token ?? null,
+        ]) !!};
+    </script>
     <script src="js/app.js"></script>
     @yield('extra-js')
 </body>

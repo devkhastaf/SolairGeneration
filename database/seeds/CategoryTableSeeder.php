@@ -13,12 +13,51 @@ class CategoryTableSeeder extends Seeder
     public function run()
     {
         $now = \Carbon\Carbon::now()->toDateTimeString();
-        Category::insert([
-            ['name' => 'Laptop1', 'slug' => 'laptop', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'Desktop', 'slug' => 'desktop', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'Phone', 'slug' => 'phone', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'Clothes', 'slug' => 'clothes', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'Apps', 'slug' => 'apps', 'created_at' => $now, 'updated_at' => $now],
+        Category::create([
+            'name' => 'Laptop1',
+            'slug' => 'laptop',
+            'created_at' => $now,
+            'updated_at' => $now
         ]);
+
+        Category::create([
+            'name' => 'Tab',
+            'slug' => 'tab',
+            'parent' => 1,
+            'created_at' => $now,
+            'updated_at' => $now
+        ])->featureds()->attach(1);
+
+
+        Category::create([
+            'name' => 'Desktop',
+            'slug' => 'desktop',
+            'created_at' => $now,
+            'updated_at' => $now
+        ])->featureds()->attach(4);
+
+
+        Category::create([
+            'name' => 'Phone',
+            'slug' => 'phone',
+            'created_at' => $now,
+            'updated_at' => $now
+        ])->featureds()->attach(2);
+
+
+        Category::create([
+            'name' => 'Clothes',
+            'slug' => 'clothes',
+            'created_at' => $now,
+            'updated_at' => $now
+        ])->featureds()->attach(3);
+
+
+        Category::create([
+            'name' => 'Apps',
+            'slug' => 'apps',
+            'created_at' => $now,
+            'updated_at' => $now
+        ])->featureds()->attach(1);
     }
 }
