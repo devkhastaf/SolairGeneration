@@ -27,7 +27,7 @@
             @foreach($products as $product)
                 <div class="column">
                     <img src="{{ productImage($product->image) }}" alt="product"/>
-                    <span  class="price">{{ $product->presentPrice() }}</span>
+                    <span  class="price">{{ presentPrice($product->price) }}</span>
                     <a href="#"><h4 class="title">{{ $product->name }}</h4></a>
                     <a href="#" class="btn"><i class="fa fa-shopping-cart"></i> Add to cart</a>
                 </div>

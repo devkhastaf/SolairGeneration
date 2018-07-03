@@ -63,7 +63,7 @@
                 @forelse($products as $product)
                     <div class="column">
                         <img src="{{ productImage($product->image) }}" alt="product">
-                        <span  class="price">{{ $product->presentPrice() }}</span>
+                        <span  class="price">{{ presentPrice($product->price) }}</span>
                         <a href="#"><h4 class="title">{{ $product->name }}</h4></a>
                         <div class="rating">
                             <i class="fa fa-star"></i>

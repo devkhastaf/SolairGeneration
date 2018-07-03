@@ -120,10 +120,14 @@ class ShopController extends Controller
      */
     public function filters()
     {
-        $category = Category::where('slug', request()->category)->first();
-        $filters = Featured::with('values')->whereHas('categories', function ($query){
-            $query->where('slug', request()->category);
-        })->get();
+        if(request()->category){
+            $category = Category::where('slug', request()->category)->first();
+            $filters = Featured::with('values')->whereHas('categories', function ($query){
+                $query->where('slug', request()->category);
+            })->get();
+        }else {
+            $filters = Featured::all();
+        }
         //dd($filters);
         return response()->json($filters);
     }

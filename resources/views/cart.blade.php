@@ -7,7 +7,7 @@
         <h2>{{ Cart::count() }} item(s) in Shopping Cart</h2>
         <ul>
             @foreach(Cart::content() as $item)
-                <li>{{ $item->model->name }} || {{ $item->model->presentPrice() }} ||
+                <li>{{ $item->model->name }} || {{ presentPrice($item->model->price) }} ||
                     <form action="{{ route('cart.destroy', $item->rowId) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}

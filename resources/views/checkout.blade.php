@@ -58,7 +58,7 @@
         <h2>Your Order</h2>
         <ul>
             @foreach(Cart::content() as $item)
-                <li>{{ $item->model->name }} || {{ $item->model->presentPrice() }} || {{ $item->qty }}</li>
+                <li>{{ $item->model->name }} || {{ presentPrice($item->model->price) }} || {{ $item->qty }}</li>
             @endforeach
         </ul>
         <table>
@@ -66,6 +66,19 @@
                 <td style=" border: 1px solid black; padding: 15px;">Subtotal</td>
                 <td style=" border: 1px solid black; padding: 15px;">{{ presentPrice(Cart::subtotal()) }}</td>
             </tr>
+            @if(session()->has('coupon'))
+                <tr style=" border: 1px solid black; padding: 15px;">
+                    <td style=" border: 1px solid black; padding: 15px;">
+                        Discount ({{ session()->get('coupon')['name'] }})
+                        <form method="POST" action="{{ route('coupon.destroy') }}">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+                            <button type="submit">Remove</button>
+                        </form>
+                    </td>
+                    <td style=" border: 1px solid black; padding: 15px;">-{{ presentPrice(session()->get('coupon')['discount']) }}</td>
+                </tr>
+            @endif
             <tr style=" border: 1px solid black; padding: 15px;">
                 <td style=" border: 1px solid black; padding: 15px;">Tax (20%)</td>
                 <td style=" border: 1px solid black; padding: 15px;">{{ presentPrice(Cart::tax()) }}</td>
@@ -75,6 +88,15 @@
                 <td style=" border: 1px solid black; padding: 15px;"><strong>{{ presentPrice(Cart::total()) }}</strong></td>
             </tr>
         </table>
+        @if(session()->has('coupon'))
+            <div>
+                <form action="{{ route('coupon.store') }}" method="POST">
+                    {{ csrf_field() }}
+                    <input type="text" name="coupon_code" placeholder="Coupon code"/>
+                    <button type="submit">Apply</button>
+                </form>
+            </div>
+         @endif
     </div>
 @endsection
 

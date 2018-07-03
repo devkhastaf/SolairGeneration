@@ -17,11 +17,11 @@ class Product extends Model
 
     protected $fillable = ['name', 'slug', 'details', 'price', 'description'];
 
-    public function presentPrice(){
+    /*public function presentPrice(){
         $fmt = new \NumberFormatter('de_DE', \NumberFormatter::CURRENCY);
         return $fmt->formatCurrency($this->price / 100, "EUR");
     }
-
+    */
     public function scopeMightAlsoLike($query){
         return $query->inRandomOrder()->take(4);
     }

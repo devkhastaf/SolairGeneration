@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/app.css" />
     <link href="css/fontawesome-all.min.css" rel="stylesheet" />
     <meta charset="utf-8" />
+    <meta name="csrf-token" content="{{ csrf_token() }}"/>
 </head>
 <body>
     <div class="wrapper-wide container" >
@@ -16,25 +17,17 @@
             </ul>
         </div>
         <div id="app">
-            <carousel>
-                <carousel-slide>
-                    <img style="text-align: center" src="images/1.jpg">
-                </carousel-slide>
-                <carousel-slide>
-                    <img style="text-align: center" src="images/2.jpg">
-                </carousel-slide>
-                <carousel-slide>
-                    <img style="text-align: center" src="images/3.jpg">
-                </carousel-slide>
-                <carousel-slide>
-                    <img style="text-align: center" src="images/4.jpg">
-                </carousel-slide>
-                <carousel-slide>
-                    <img style="text-align: center" src="images/5.jpg">
-                </carousel-slide>
-            </carousel>
+            <featured>
+            </featured>
         </div>
     </div>
+
+    <script>
+        window.Laravel = {!! json_encode([
+            'csrfToken' => csrf_token(),
+            'apiToken' => auth()->user()->api_token ?? null,
+        ]) !!};
+    </script>
     <script src="js/app.js"></script>
 <script>
     var menuHeader = document.querySelector('.menu-header');
