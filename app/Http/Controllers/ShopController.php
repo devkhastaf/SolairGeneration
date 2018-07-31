@@ -6,6 +6,7 @@ use App\Category;
 use App\Featured;
 use App\Product;
 use Illuminate\Http\Request;
+use Nicolaslopezj\Searchable\SearchableTrait;
 
 class ShopController extends Controller
 {
@@ -66,6 +67,32 @@ class ShopController extends Controller
     public function store(Request $request)
     {
         //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|min:3'
+        ]);
+
+
+        $query = $request->get('query');
+
+        /*$products = Product::where('name', 'LIKE', "%$query%")
+                            ->orWhere('details', 'LIKE', "%$query%")
+                            ->orWhere('description', 'LIKE', "%$query%")
+                            ->paginate(15);
+        */
+
+        $products =  Product::search($query)->paginate(15);
+        //dd($products);
+        return view('search-result')->with('products', $products);
     }
 
     /**

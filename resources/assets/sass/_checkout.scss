@@ -1,0 +1,15 @@
+.checkout {
+  padding: 2rem auto;
+  display: flex;
+  flex-wrap: wrap;
+  .left {
+    flex: 1;
+    flex-basis: 15%;
+    padding: 2rem auto;
+  }
+  .right {
+    flex: 1;
+    flex-basis: 15%;
+    padding: 2rem auto;
+  }
+}

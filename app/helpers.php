@@ -15,3 +15,7 @@ function productImage($path){
 function categoryImage($path){
     return $path && file_exists('storage/' . $path) ? asset('storage/'. $path) : asset('images/not_found.jpg');
 }
+
+function slideImage($path){
+    return $path && file_exists('storage/' . $path) ? asset('storage/'. $path) : asset('images/not_found.jpg');
+}

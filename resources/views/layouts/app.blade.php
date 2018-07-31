@@ -21,7 +21,7 @@
                     <a href="{{ route('shop.index') }}">Product</a>
                     <a href="#">Contact</a>
                     <a href="#">About</a>
-                    <a href="#"><i class="fa fa-search"></i></a>
+                    @include('partials.search')
                     <a href="{{ route('cart.index') }}">
                         <i class="fa fa-shopping-cart">
                             @if(Cart::count() > 0)

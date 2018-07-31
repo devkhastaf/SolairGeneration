@@ -2,24 +2,13 @@
 
 @section('content')
     <carousel>
-        <carousel-slide>
-            <img style="text-align: center" src="images/1.jpg">
-        </carousel-slide>
-        <carousel-slide>
-            <img style="text-align: center" src="images/2.jpg">
-        </carousel-slide>
-        <carousel-slide>
-            <img style="text-align: center" src="images/3.jpg">
-        </carousel-slide>
-        <carousel-slide>
-            <img style="text-align: center" src="images/4.jpg">
-        </carousel-slide>
-        <carousel-slide>
-            <img style="text-align: center" src="images/5.jpg">
-        </carousel-slide>
-        <carousel-slide>
-            <img style="text-align: center" src="images/6.jpg">
-        </carousel-slide>
+        @foreach($slides as $slide)
+            <carousel-slide>
+                <a href="{{ route('shop.index') }}">
+                    <img style="text-align: center" src="{{ slideImage($slide->image) }}">
+                </a>
+            </carousel-slide>
+        @endforeach
     </carousel>
     <div class="last-products wrapper-wide">
         <h2>Last Products</h2>

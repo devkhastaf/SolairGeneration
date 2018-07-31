@@ -2,8 +2,52 @@
 
 @section('css')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-@stop
+    <style>
+        .panel .mce-panel {
+            border-left-color: #fff;
+            border-right-color: #fff;
+        }
 
+        .panel .mce-toolbar,
+        .panel .mce-statusbar {
+            padding-left: 20px;
+        }
+
+        .panel .mce-edit-area,
+        .panel .mce-edit-area iframe,
+        .panel .mce-edit-area iframe html {
+            padding: 0 10px;
+            min-height: 350px;
+        }
+
+        .mce-content-body {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .panel.is-fullscreen .mce-statusbar {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            z-index: 200000;
+        }
+
+        .panel.is-fullscreen .mce-tinymce {
+            height:100%;
+        }
+
+        .panel.is-fullscreen .mce-edit-area,
+        .panel.is-fullscreen .mce-edit-area iframe,
+        .panel.is-fullscreen .mce-edit-area iframe html {
+            height: 100%;
+            position: absolute;
+            width: 99%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            min-height: 100%;
+        }
+    </style>
+@stop
 @section('page_title', __('voyager::generic.'.(!is_null($dataTypeContent->getKey()) ? 'edit' : 'add')).' '.$dataType->display_name_singular)
 
 @section('page_header')
@@ -15,101 +59,198 @@
 @stop
 
 @section('content')
-    <div class="page-content edit-add container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+    <div class="page-content container-fluid" id="application">
+        <form role="form"
+              class="form-edit-add"
+              action="@if(!is_null($dataTypeContent->getKey())){{ route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) }}@else{{ route('voyager.'.$dataType->slug.'.store') }}@endif"
+              method="POST" enctype="multipart/form-data">
+            <!-- PUT Method if we are editing -->
+            @if(!is_null($dataTypeContent->getKey()))
+                {{ method_field("PUT") }}
+            @endif
 
-                <div class="panel panel-bordered">
-                    <!-- form start -->
-                    <form role="form"
-                          class="form-edit-add"
-                          action="@if(!is_null($dataTypeContent->getKey())){{ route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) }}@else{{ route('voyager.'.$dataType->slug.'.store') }}@endif"
-                          method="POST" enctype="multipart/form-data">
-                        <!-- PUT Method if we are editing -->
-                    @if(!is_null($dataTypeContent->getKey()))
-                        {{ method_field("PUT") }}
-                    @endif
+            <!-- CSRF TOKEN -->
+            {{ csrf_field() }}
+            <div class="row">
+                <div class="col-md-8">
+                    <!-- ### TITLE ### -->
+                    <div class="panel">
 
-                    <!-- CSRF TOKEN -->
-                        {{ csrf_field() }}
+                        @if (count($errors) > 0)
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    <i class="voyager-character"></i> Product Information
+                                    <span class="panel-desc">The name of your product</span>
+                                </h3>
+                                <div class="panel-actions">
+                                    <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                                </div>
+                            </div>
+                            <div class="panel-body">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="{{ __('voyager::generic.name') }}" value="@if(isset($dataTypeContent->name)){{ $dataTypeContent->name }}@endif">
+                            </div>
+                        </div>
+                    <!-- ### Details ### -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Details</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                            </div>
+                        </div>
+                            <div class="panel-body">
+                                <input type="text" class="form-control" name="details" id="details" required="" placeholder="{{ __('voyager::generic.details') }}" value="@if(isset($dataTypeContent->details)){{ $dataTypeContent->details }}@endif">
+                            </div>
+                    </div>
+                    <!-- ### Price ### -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Price</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <input type="number" class="form-control" name="price" id="price" required="" placeholder="{{ __('voyager::generic.price') }}" value="@if(isset($dataTypeContent->price)){{ $dataTypeContent->price }}@endif">
+                        </div>
+                    </div>
+
+                    <!-- ### Description ### -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Description</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-resize-full" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                            </div>
+                        </div>
+                        @php
+                            $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
+                            $row = $dataTypeRows->where('field', 'description')->first();
+                        @endphp
 
                         <div class="panel-body">
+                            {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
+                        </div>
+                    </div><!-- .panel -->
 
-                            @if (count($errors) > 0)
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                    <!-- ### FEATUREDS ### -->
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Featureds</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-resize-full" data-toggle="panel-fullscreen" aria-hidden="true"></a>
+                            </div>
+                        </div>
 
-                        <!-- Adding / Editing -->
-                            @php
-                                $dataTypeRows = $dataType->{(!is_null($dataTypeContent->getKey()) ? 'editRows' : 'addRows' )};
-                            @endphp
+                        <div class="panel-body" id="featuredsContainer">
+                            <button type="submit" id="add-featured" class="btn btn-primary pull-left">Add Featured</button>
+                        </div>
+                    </div><!-- .panel -->
 
-                            @foreach($dataTypeRows as $row)
-                            <!-- GET THE DISPLAY OPTIONS -->
+                </div>
+                <div class="col-md-4">
+                    <!-- ### DETAILS ### -->
+                    <div class="panel panel panel-bordered panel-warning">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="icon wb-clipboard"></i>Details</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="slug">URL Slug</label>
+                                <input type="text" class="form-control" data-slug-origin="name" id="slug" name="slug"
+                                       placeholder="slug"
+                                       {{!! isFieldSlugAutoGenerator($dataType, $dataTypeContent, "slug") !!}}
+                                       value="@if(isset($dataTypeContent->slug)){{ $dataTypeContent->slug }}@endif">
+                            </div>
+                            <div class="form-group>
+                                <label for="featured">Featrued</label>
                                 @php
-                                    $options = json_decode($row->details);
-                                    $display_options = isset($options->display) ? $options->display : NULL;
+                                    $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
+                                    $row = $dataTypeRows->where('field', 'featured')->first();
                                 @endphp
-                                @if ($options && isset($options->legend) && isset($options->legend->text))
-                                    <legend class="text-{{$options->legend->align or 'center'}}" style="background-color: {{$options->legend->bgcolor or '#f0f0f0'}};padding: 5px;">{{$options->legend->text}}</legend>
-                                @endif
-                                @if ($options && isset($options->formfields_custom))
-                                    @include('voyager::formfields.custom.' . $options->formfields_custom)
-                                @else
-                                    <div class="form-group @if($row->type == 'hidden') hidden @endif col-md-{{ $display_options->width or 12 }}" @if(isset($display_options->id)){{ "id=$display_options->id" }}@endif>
-                                        {{ $row->slugify }}
-                                        <label for="name">{{ $row->display_name }}</label>
-                                        @include('voyager::multilingual.input-hidden-bread-edit-add')
-                                        @if($row->type == 'relationship')
-                                            @include('voyager::formfields.relationship')
-                                        @else
-                                            {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
-                                        @endif
 
-                                        @foreach (app('voyager')->afterFormFields($row, $dataType, $dataTypeContent) as $after)
-                                            {!! $after->handle($row, $dataType, $dataTypeContent) !!}
-                                        @endforeach
-                                    </div>
-                                @endif
-                            @endforeach
+                                {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
 
-                        </div><!-- panel-body -->
-                        <div class="form-group">
-                            <label>Categories</label>
+                            </div>
+                        </div>
+
+                    <!-- ### CATEGORIES ### -->
+                    <div class="panel panel-bordered panel-info">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="icon wb-search"></i>Categories</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                            </div>
+                        </div>
+                        <div class="panel-body">
                             <ul>
                                 @foreach($allCategories as $category)
-                                    <li><label><input type="checkbox" value="{{ $category->id }}" name="categories[]" {{ $categoriesForProduct->contains($category) ? 'checked' : '' }}>{{ $category->name }}</label></li>
+                                    <li><label><input v-bind="categories" type="checkbox" value="{{ $category->id }}" name="categories[]" {{ $categoriesForProduct->contains($category) ? 'checked' : '' }}>{{ $category->name }}</label></li>
                                 @endforeach
                             </ul>
                         </div>
-                        <div class="form-group" id="featuredsContainer">
-                            <label>Featureds</label>
-                            <button class="btn btn-default" id="addFeaturedButton">Add featured</button>
+                    </div>
+                    <!-- ### IMAGE ### -->
+                    <div class="panel panel-bordered panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="icon wb-image"></i>Product Image</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                            </div>
                         </div>
-
-                        <div class="panel-footer">
-                            <button type="submit" class="btn btn-primary save">{{ __('voyager::generic.save') }}</button>
+                        <div class="panel-body">
+                            @if(isset($dataTypeContent->image))
+                                <img src="{{ filter_var($dataTypeContent->image, FILTER_VALIDATE_URL) ? $dataTypeContent->image : Voyager::image( $dataTypeContent->image ) }}" style="width:100%" />
+                            @endif
+                            <input type="file" name="image">
                         </div>
-                    </form>
+                    </div>
+                    <!--## IMAGES ##-->
+                    <div class="panel panel-bordered panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><i class="icon wb-image"></i>Product Images</h3>
+                            <div class="panel-actions">
+                                <a class="panel-action voyager-angle-down" data-toggle="panel-collapse" aria-hidden="true"></a>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                @php
+                                    $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
+                                    $row = $dataTypeRows->where('field', 'images')->first();
+                                @endphp
 
-                    <iframe id="form_target" name="form_target" style="display:none"></iframe>
-                    <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
-                          enctype="multipart/form-data" style="width:0;height:0;overflow:hidden">
-                        <input name="image" id="upload_file" type="file"
-                               onchange="$('#my_form').submit();this.value='';">
-                        <input type="hidden" name="type_slug" id="type_slug" value="{{ $dataType->slug }}">
-                        {{ csrf_field() }}
-                    </form>
+                                {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
 
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+            <button type="submit" class="btn btn-primary pull-left">
+                @if(isset($dataTypeContent->id)) Update @else <i class="icon wb-plus-circle"></i> Add @endif
+            </button>
+        </form>
+        <iframe id="form_target" name="form_target" style="display:none"></iframe>
+        <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
+               enctype="multipart/form-data" style="width:0;height:0;overflow:hidden">
+                <input name="image" id="upload_file" type="file"
+                       onchange="$('#my_form').submit();this.value='';">
+                <input type="hidden" name="type_slug" id="type_slug" value="{{ $dataType->slug }}">
+                {{ csrf_field() }}
+        </form>
     </div>
 
     <div class="modal fade modal-danger" id="confirm_delete_modal">
@@ -198,10 +339,21 @@
             var price = $('input[name="price"]').val();
             $('input[name="price"]').val(price / 100);
 
-            $('#addFeaturedButton').click(function (e) {
+            $('#add-featured').click(function (e) {
                 e.preventDefault();
                 $('#featuredsContainer').append("<h1>It's work</h1>");
+                $categories = $('input[name=categories]');
+                console.log($categories);
             })
+
         });
+    </script>
+    <script>
+        new Vue({
+            el:'#application',
+            data: {
+                categories: []
+            }
+        })
     </script>
 @stop

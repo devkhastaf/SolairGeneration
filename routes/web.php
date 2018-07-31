@@ -28,9 +28,19 @@ Route::delete('/coupon', 'CouponsController@destroy')->name('coupon.destroy');
 Route::get('/checkout', 'CheckoutController@index')->name('checkout.index');
 Route::post('/checkout', 'CheckoutController@store')->name('checkout.store');
 
+Route::get('/thankyou', 'ConfirmationController@index')->name('confirmation.index');
+
+Route::get('/search', 'ShopController@search')->name('search');
+
 
 Route::get('/empty', function (){
     return view('test');
+});
+
+Route::get('/mailable', function (){
+    $order = App\Order::find(1);
+
+    return new App\Mail\OrderPlaced($order);
 });
 
 
