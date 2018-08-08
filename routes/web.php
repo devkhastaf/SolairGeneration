@@ -32,6 +32,9 @@ Route::get('/thankyou', 'ConfirmationController@index')->name('confirmation.inde
 
 Route::get('/search', 'ShopController@search')->name('search');
 
+Route::get('login/{provider}', 'Auth\AuthSocialiteController@redirectToProvider');
+Route::get('login/{provider}/callback', 'Auth\AuthSocialiteController@handleProviderCallback');
+
 
 Route::get('/empty', function (){
     return view('test');
