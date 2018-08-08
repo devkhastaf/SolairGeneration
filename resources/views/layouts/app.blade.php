@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 </head>
 <body>
-    <div class="wrapper-wide" id="app">
+    <div class="wrapper-wide">
         <!-- Header -->
         <div class="header">
             <header class="wrapper-wide">
