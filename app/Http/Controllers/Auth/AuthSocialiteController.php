@@ -34,7 +34,7 @@ class AuthSocialiteController extends Controller
        if(!$selectProvider)
        {
            // New user
-           $userGetReal = User::where('eamil', $user->getEmail())->first();
+           $userGetReal = User::where('email', $user->getEmail())->first();
            if(!$userGetReal)
            {
                $userGetReal = new User();
