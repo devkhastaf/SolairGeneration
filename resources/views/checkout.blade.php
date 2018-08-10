@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     <label for="name_on_card">Name on card</label>
-                    <input type="text" name="name_on_card" id="name_on_card"><br>
+                    <input type="text" name="name" id="name"><br>
                 </div>
                 <div>
                     <label for="address">Address</label>
