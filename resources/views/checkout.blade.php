@@ -160,7 +160,7 @@
                 //document.getElementById('#complete-order').disable = true;
 
                 var options = {
-                    name: document.getElementById('name_on_card').value,
+                    name: document.getElementById('name').value,
                     address_line1: document.getElementById('address').value,
                     address_city: document.getElementById('city').value,
                     address_state: document.getElementById('province').value,
