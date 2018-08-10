@@ -157,7 +157,7 @@
             form.addEventListener('submit', function(event) {
                 event.preventDefault();
 
-                document.getElementById('#complete-order').disable = true;
+                //document.getElementById('#complete-order').disable = true;
 
                 var options = {
                     name: document.getElementById('name_on_card').value,
