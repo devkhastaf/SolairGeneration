@@ -27,7 +27,7 @@ class CreateOrdersTable extends Migration
             $table->string('billing_phone');
             $table->string('billing_name_on_card');
             $table->integer('billing_discount')->default(0);
-            $table->string('billing_discount_code');
+            $table->string('billing_discount_code')->nullable();
             $table->integer('billing_subtotal');
             $table->integer('billing_tax');
             $table->integer('billing_total');
