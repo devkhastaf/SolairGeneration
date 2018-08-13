@@ -68,7 +68,8 @@ class CheckoutController extends Controller
             ]);
 
             $order = $this->addToOrdersTables($request, null);
-            Mail::send(new OrderPlaced($order));
+            dd($order);
+            //Mail::send(new OrderPlaced($order));
 
             // SUCCESSFUL
             Cart::instance('default')->destroy();
