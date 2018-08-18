@@ -26,7 +26,9 @@ Route::post('/coupon', 'CouponsController@store')->name('coupon.store');
 Route::delete('/coupon', 'CouponsController@destroy')->name('coupon.destroy');
 
 Route::get('/checkout', 'CheckoutController@index')->name('checkout.index');
-Route::post('/checkout', 'CheckoutController@store')->name('checkout.store');
+Route::post('/pay', 'CheckoutController@pay')->name('checkout.pay');
+Route::post('/payWithStripe', 'CheckoutController@payWithStripe')->name('checkout.payWithStripe');
+Route::post('/payWithPaypal', 'CheckoutController@payWithPaypal')->name('checkout.payWithPaypal');
 
 Route::get('/thankyou', 'ConfirmationController@index')->name('confirmation.index');
 
@@ -35,7 +37,8 @@ Route::get('/search', 'ShopController@search')->name('search');
 Route::get('/login/{provider}', 'Auth\AuthSocialiteController@redirectToProvider');
 Route::get('/login/{provider}/callback', 'Auth\AuthSocialiteController@handleProviderCallback');
 
-Route::get('/orders/{order}/reviews', 'ReviewsController@index')->name('reviews.index');
+Route::get('/orders', 'OrdersController@index')->name('orders.index');
+//Route::get('/orders/{order}/reviews', 'OrdersController@index')->name('orders.index');
 
 Route::get('/empty', function (){
     return view('test');

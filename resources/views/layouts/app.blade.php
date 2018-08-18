@@ -40,68 +40,6 @@
         <div class="container">
             @yield('content')
         </div>
-        <!-- Footer -->
-        <div class="footer">
-            <div class="nav-footer wrapper-wide">
-                <div class="column">
-                    <h3>My Account</h3>
-                    <ul>
-                        <li><a href="#">Consectetur</a></li>
-                        <li><a href="#">Adipisicing</a></li>
-                        <li><a href="#">Incididunt</a></li>
-                        <li><a href="#">Labore</a></li>
-                        <li><a href="#">Eiusmod</a></li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h3>My Account</h3>
-                    <ul>
-                        <li><a href="#">Consectetur</a></li>
-                        <li><a href="#">Adipisicing</a></li>
-                        <li><a href="#">Incididunt</a></li>
-                        <li><a href="#">Labore</a></li>
-                        <li><a href="#">Eiusmod</a></li>
-                    </ul>
-                </div>
-                <div class="column">
-                    <h3>My Account</h3>
-                    <ul>
-                        <li><a href="#">Consectetur</a></li>
-                        <li><a href="#">Adipisicing</a></li>
-                        <li><a href="#">Incididunt</a></li>
-                        <li><a href="#">Labore</a></li>
-                        <li><a href="#">Eiusmod</a></li>
-                    </ul>
-                </div>
-                <div class="newslater">
-                    <h3>Join to our Newslater</h3>
-                    Tempor incididunt ut labore et dolore magna aliqua.
-                    <form>
-                        <input type="email" name="email">
-                        <input class="btn btn-submit" type="submit" value="Submit">
-                    </form>
-                    <h3>Contact info</h3>
-                    <i class="fa fa-location-arrow">Tempor incididunt ut labore et dolore magna aliqua.</i>
-                    <i class="fa fa-phone">+31 55 88 99 66 33 </i>
-                </div>
-            </div>
-            <div class="footer-bottom wrapper-wide">
-                <div class="paiment">
-                    <i class="fa fa-paypal"></i>
-                    <i class="fa fa-cc-visa"></i>
-                    <i class="fa fa-cc-mastercard"></i>
-                    <i class="fa fa-cc-discover"></i>
-                    <i class="fa fa-cc-amex"></i>
-                </div>
-                <div class="contact">
-                    <h3>Contact info</h3>
-                    <i class="fa fa-location-arrow">Tempor incididunt ut labore et dolore magna aliqua.</i>
-                    <i class="fa fa-phone">+31 55 88 99 66 33 </i>
-                </div>
-            </div>
-            <div class="copyright"><i class="fa fa-copyright">All right reserved to Solair Generation 2018</i></div>
-        </div>
-        <!-- End Footer-->
     </div>
     <script>
         window.Laravel = {!! json_encode([

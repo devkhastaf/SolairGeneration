@@ -34,9 +34,36 @@ class CheckoutController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function pay(Request $request)
     {
-        //
+        $info = $request->all();
+        if($request->stripe)
+        {
+            return view('payWithStripe')->with([
+                'info' => $info,
+                'discount' => $this->getNumbers()->get('discount'),
+                'newSubtotal' => $this->getNumbers()->get('newSubtotal'),
+                'newTax' => $this->getNumbers()->get('newTax'),
+                'newTotal' => $this->getNumbers()->get('newTotal')
+            ]);
+        } elseif ($request->paypal)
+        {
+            return view('payWithPaypal')->with([
+                'info' => $info,
+                'discount' => $this->getNumbers()->get('discount'),
+                'newSubtotal' => $this->getNumbers()->get('newSubtotal'),
+                'newTax' => $this->getNumbers()->get('newTax'),
+                'newTotal' => $this->getNumbers()->get('newTotal')
+            ]);
+        } else
+        {
+            return redirect()->back()->withErrors('error', 'you should to choose the method of payment')->with([
+                'discount' => $this->getNumbers()->get('discount'),
+                'newSubtotal' => $this->getNumbers()->get('newSubtotal'),
+                'newTax' => $this->getNumbers()->get('newTax'),
+                'newTotal' => $this->getNumbers()->get('newTotal')
+            ]);
+        }
     }
 
     /**
@@ -45,8 +72,9 @@ class CheckoutController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function payWithStripe(Request $request)
     {
+        dd($request);
         $contents = Cart::content()->map(function ($item) {
             return $item->model->slug . ',' . $item->qty;
         })->values()->toJson();
@@ -68,7 +96,6 @@ class CheckoutController extends Controller
             ]);
 
             $order = $this->addToOrdersTables($request, null);
-            //dd($order);
             Mail::send(new OrderPlaced($order));
 
             // SUCCESSFUL

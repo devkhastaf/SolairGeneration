@@ -44,7 +44,7 @@
         <h2>{{ Cart::instance('saveForLater')->count() }} item(s) in Save For Later</h2>
         <ul>
             @foreach(Cart::instance('saveForLater')->content() as $item)
-                <li>{{ $item->model->name }} || {{ $item->model->presentPrice() }}
+                <li>{{ $item->model->name }} || {{ presentPrice($item->model->price) }}
                     <form action="{{ route('saveForLater.destroy', $item->rowId) }}" method="POST">
                         {{ csrf_field() }}
                         {{ method_field('DELETE') }}

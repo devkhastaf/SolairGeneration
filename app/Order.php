@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    protected $table = 'orders';
     protected $fillable = [
         'user_id', 'billing_email', 'billing_name', 'billing_address',
         'billing_city', 'billing_province', 'billing_postalcode', 'billing_phone',
@@ -21,6 +22,6 @@ class Order extends Model
 
     public function products()
     {
-        return $this->hasMany('App\Product'); //->withPivot('quantity');
+        return $this->hasMany('App\Product','order_id','product_id', 'order_product'); //->withPivot('quantity');
     }
 }

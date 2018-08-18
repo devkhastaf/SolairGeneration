@@ -39,7 +39,7 @@ class Product extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Order');
+        return $this->hasMany('App\Order','product_id', 'order_id', 'order_product');
     }
 
     public function featureds(){
