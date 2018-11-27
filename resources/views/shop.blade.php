@@ -1,117 +1,134 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="wrapper-wide services">
-        <div class="column">
-            <i class="fa fa-clock fa-4x" style="font-weight: normal"></i>
-            <h3>Reprehenderit in voluptate</h3>
-            <p>Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.</p>
-        </div>
-        <div class="column">
-            <i class="fa fa-piggy-bank fa-4x"></i>
-            <h3>Reprehenderit in voluptate</h3>
-            <p>Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.</p>
-        </div>
-        <div class="column">
-            <i class="fa fa-headphones fa-4x"></i>
-            <h3>Reprehenderit in voluptate</h3>
-            <p>Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.</p>
-        </div>
-    </div>
-    <div class="list-products wrapper-wide">
-        <div class="side-bar">
-            <h2>Categories</h2>
-            <div class="filter">
-                @if(request()->category)
-                    <form action="{{ route('shop.index') }}" method="GET">
-                        <ul>
+        <div class="container mx-auto"><!--Products-->
+            @if(request()->category)
+                <div class="breadcrump mb-2 text-blue-darkest font-semibold text-lg">
+                    <a href="{{ route('shop.index') }}" class="hover:text-red-light"><i class="fa fa-home"></i></a>
+                        >
+                        <a href="{{ route('shop.index', ['category' => request()->category]) }}" class="hover:text-red-light">{{ request()->category }}</a>
+                </div>
+            @endif
+            <div class="grid grid-columns-12 grid-gap-2 mb-6" style="grid-gap: 1rem;">
+                <div class="col-span-3">
+                    <div class="bg-white px-2 py-2">
+                        @if(request()->category)
+                        <div class="text-lg font-semibold text-blue-darkest">Filters</div>
+                        <form action="{{ route('shop.filters') }}" method="post">
+                            @csrf
                             @foreach($featureds as $featured)
-                                <li>{{ $featured->name }}</li>
-                                    @foreach($featured->values as $value)
-                                        <label for="{{ $featured->slug }}">{{ $value->value }}</label>
-                                        <input type="checkbox" name="filters-{{ $featured->slug }}" id="{{ $featured->slug }}">
-                                    @endforeach
+                                <div class="py-2">
+                                    <div class="mb-2 text-orange text-lg border-b-1 border-solid border-black cursor-pointer hover:text-red-light">- {{ $featured->name }}</div>
+                                    <div class="px-2">
+                                        <fieldset>
+                                            @foreach($featured->values as $value)
+                                                <input type="checkbox" id="{{ $value->value }}" value="{{ $value->value }}" name="filters[]">
+                                                <label class="mb-2" for="{{ $value->value }}">{{ $value->value }}"</label><br>
+                                            @endforeach
+                                        </fieldset>
+                                    </div>
+                                </div>
                             @endforeach
-                        </ul>
-                        <button type="submit">Save</button>
-                    </form>
-                @else
-                    <ul>
-                        @foreach($categories as $category)
-                            <li class="{{ setActiveCategory($category->slug)  }}"><a href="{{ route('shop.index', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
-                        @endforeach
-                    </ul>
-                @endif
-            </div>
-            <div>
-                <ul>
-                    <li><a href="{{  route('shop.index', ['category' => request()->category, 'sort' => 'low_hight']) }}">Low to Hight</a></li>
-                    <li><a href="{{  route('shop.index', ['category' => request()->category, 'sort' => 'hight_low']) }}">Hight to Low</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="products">
-            <h1>{{ $categoryName }}</h1>
-            <h2>Convertisseurs de tension pursinus</h2>
-            <div class="grid-products">
-                @forelse($products as $product)
-                    <div class="column">
-                        <img src="{{ productImage($product->image) }}" alt="product">
-                        <span  class="price">{{ presentPrice($product->price) }}</span>
-                        <a href="#"><h4 class="title">{{ $product->name }}</h4></a>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <form action="{{ route('cart.store') }}" method="POST">
-                            {{ csrf_field() }}
-                            <input type="hidden" name="id" value="{{ $product->id }}">
-                            <input type="hidden" name="name" value="{{ $product->name }}">
-                            <input type="hidden" name="price" value="{{ $product->price }}">
-                            <button type="submit" class="btn"><i class="fa fa-shopping-cart"> Add to cart</i> </button>
+                            <button type="submit" class="btn-red">Save</button>
+                            <button type="reset" class="btn-red">Reset</button>
                         </form>
+                        @else
+                            <div class="text-2xl font-semibold text-blue-darkest">Categories</div>
+                            <ul class="list-reset pl-6">
+                                @foreach($categories as $category)
+                                    <li class="{{ setActiveCategory($category->slug)  }} text-lg my-4"><a class="hover:text-orange" href="{{ route('shop.index', ['category' => $category->slug]) }}">{{ $category->name }}</a></li>
+                                @endforeach
+                            </ul>
+                        @endif
                     </div>
-                @empty
-                    <div>
-                        No items found
+                </div>
+                <div class="col-span-9 py-2">
+                    <div class="text-blue-darkest font-semibold text-lg">
+                        <div class="text-2xl mb-2">{{ request()->category }}</div>
+                        <div class="flex pb-2">
+                            <div class="flex-1 font-light">
+                                Sorted by :
+                                <a href="{{  route('shop.index', ['category' => request()->category, 'sort' => 'low_hight']) }}" class="{{ request()->sort == 'low_hight' ? 'font-semibold' : ''}} mr-2 hover:text-red-light">Low to Hight</a>
+                                <a href="{{  route('shop.index', ['category' => request()->category, 'sort' => 'hight_low']) }}" class="{{ request()->sort == 'hight_low' ? 'font-semibold' : ''}} hover:text-red-light">Hight to Low</a>
+                            </div>
+                            <div class="flex-1 text-right">
+                                <a href="#" class="hover:text-red-light mr-1"><i class="fa fa-list"></i></a>
+                                <a href="#" class="hover:text-red-light text-orange"><i class="fa fa-th"></i></a>
+                            </div>
+                        </div>
                     </div>
-                @endforelse
+                    <div class="grid grid-columns-4 grid-gap-4 mb-6" style="grid-gap: 2rem;">
+                        @forelse($products as $product)
+                            <div class="bg-white shadow-lg py-6 px-6 text-center">
+                                <a href="{{ route('shop.show', ['product' => $product->slug]) }}">
+                                    <img style="width: 200px; height: auto;" src="{{ productImage($product->image) }}" alt="thumb" class="mb-1 transition-slow hover:opacity-75">
+                                </a>
+                                <div class="text-orange text-lg font-semibold my-2">{{ presentPrice($product->price) }}</div>
+                                <div class="text-lg font-semibold mb-1"><a href="{{ route('shop.show', ['product' => $product->slug]) }}" class="text-blue-darkest hover:text-red-light">{{ $product->name }}</a></div>
+                                <div class="rating text-orange mb-4">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star text-grey-light"></i>
+                                    (45)
+                                </div>
+                                <div>
+                                    <form action="{{ route('cart.store') }}" method="POST">
+                                        {{ csrf_field() }}
+                                        <input type="hidden" name="id" value="{{ $product->id }}">
+                                        <input type="hidden" name="name" value="{{ $product->name }}">
+                                        <input type="hidden" name="price" value="{{ $product->price }}">
+                                        <button type="submit" class="btn"><i class="fa fa-shopping-cart"> Add to cart</i> </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @empty
+                            <div>
+                                No items found
+                            </div>
+                        @endforelse
+                    </div>
+                    <div class="mt-10">
+                        {{ $products->links() }}
+                    </div>
+                </div>
             </div>
-            <div class="pagination">
-                {{ $products->appends(request()->input())->links() }}
+        </div><!--End Products-->
+        <div class="container mx-auto py-8"><!--Brands-->
+            <div class="text-2xl font-semibold mb-2 text-blue-darkest">Choice by brand</div>
+            <div class="border-b-4 border-solid border-blue-darkest w-16 mb-6"></div>
+            <div class="grid grid-columns-6 grid-gap-4 mb-6 py-4 text-center" style="grid-gap: 2rem">
+                <div>
+                    <a href="#">
+                        <img class="transition-slow hover:opacity-75" style="width:45%;" src="images/brand1.png" alt="brand">
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img class="transition-slow hover:opacity-75" style="width:45%;" class="w-45" src="images/brand2.png" alt="brand">
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img class="transition-slow hover:opacity-75" style="width:45%;" class="w-45" src="images/brand3.png" alt="brand">
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img style="width:45%;" class="w-45" src="images/brand1.png" alt="brand">
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img class="transition-slow hover:opacity-75" style="width:45%;" class="w-45" src="images/brand2.png" alt="brand">
+                    </a>
+                </div>
+                <div>
+                    <a href="#">
+                        <img class="transition-slow hover:opacity-75" style="width:45%;" src="images/brand3.png" alt="brand">
+                    </a>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="brands wrapper-wide">
-        <h2>Choice by Brand</h2>
-        <div class="brands-grid">
-            <div class="column">
-                <a href="#"><img src="images/brand1.png"></a>
-            </div>
-            <div class="column">
-                <a href="#"><img src="images/brand2.png"></a>
-            </div>
-            <div class="column">
-                <a href="#"><img src="images/brand3.png"></a>
-            </div>
-            <div class="column">
-                <a href="#"><img src="images/brand1.png"></a>
-            </div>
-            <div class="column">
-                <a href="#"><img src="images/brand2.png"></a>
-            </div>
-            <div class="column">
-                <a href="#"><img src="images/brand3.png"></a>
-            </div>
-        </div>
-    </div>
+        </div><!--End Brands-->
 @endsection

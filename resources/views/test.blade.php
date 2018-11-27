@@ -2,12 +2,12 @@
 <html>
 <head>
     <title>Testing HTML</title>
-    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/main.css" />
     <link href="css/fontawesome-all.min.css" rel="stylesheet" />
     <meta charset="utf-8" />
     <meta name="csrf-token" content="{{ csrf_token() }}"/>
 </head>
-<body>
+<body class="bg-red">
     <div class="wrapper-wide container" >
         <span class="menu-header"><i class="fa fa-user"></i> <i class="fa fa-chevron-down"></i></span>
         <div class="menu-container">
@@ -17,8 +17,12 @@
             </ul>
         </div>
         <div id="app">
-            <featured>
-            </featured>
+            <form action="{{ route('posttest') }}" method="post">
+                {{ csrf_field() }}
+                <feature>
+                </feature>
+                <button type="submit">Send</button>
+            </form>
         </div>
     </div>
 

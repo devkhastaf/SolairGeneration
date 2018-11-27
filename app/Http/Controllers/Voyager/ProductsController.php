@@ -166,6 +166,7 @@ class ProductsController extends VoyagerBaseController
     // POST BR(E)AD
     public function update(Request $request, $id)
     {
+        dd($request->all());
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -264,6 +265,7 @@ class ProductsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();

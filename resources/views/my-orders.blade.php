@@ -4,17 +4,10 @@
         <div class="container mx-auto"><!--Orders-->
             <div class="grid grid-columns-12 my-6 text-left" style="grid-gap: 1rem;">
                 <div class="col-span-2">
-                    <div class="bg-white p-4 shadow-md rounded-lg">
-                        <div class="my-4 text-2xl font-semibold text-blue-darkest">Abderrazzaq Khastaf</div>
-                        <nav>
-                            <a href="#" class="top-nav-item block pb-2 my-2 text-lg">Profile</a>
-                            <a href="#" class="top-nav-item block pb-2 my-2 text-lg">Orders</a>
-                            <a href="#" class="top-nav-item block pb-2 my-2 text-lg">Address</a>
-                        </nav>
-                    </div>
+                    @include('partials.sidenavbar')
                 </div>
                 <div class="col-span-10 bg-white p-4 shadow-md rounded-lg">
-                    <div class="my-4 text-2xl font-semibold text-blue-darkest">Vos Articles</div>
+                    <div class="my-4 text-2xl font-semibold text-blue-darkest">My Orders</div>
                     <div class="">
                         <div class="flex border-b-1 border-solid border-blue-darkest">
                             <div class="flex-1 text-lg text-blue-darkest ">Description</div>
@@ -35,6 +28,7 @@
                                 </div>
                             @endforeach
                         @endforeach
+                        {{ $orders->links() }}
                         <div class="pagination text-center mt-6 py-6">
                             <span class="btn-pagination"><</span>
                             <span class="btn-pagination-active">1</span>

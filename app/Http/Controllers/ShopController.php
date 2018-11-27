@@ -17,7 +17,7 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $pagination = 9;
+        $pagination = 4;
         $categories = Category::all();
         if(request()->category){
             $products = Product::with('categories')->whereHas('categories', function ($query){
@@ -101,9 +101,12 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $product = Product::where('slug', $slug)->first();
+        return view('show')->with([
+            'product' => $product
+        ]);
     }
 
     /**
@@ -135,9 +138,16 @@ class ShopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function categoryforfilter(Request $request)
     {
-        //
+        /*$categories = Category::findOrFail($request->categories);
+        $features = Featured::with('categories')->whereHas(function ($query) use ($categories){
+            foreach ($categories as $category) {
+                $query->where('value', $category);
+            }
+        })->get();
+        */
+        return $request->categories;
     }
 
     /**
@@ -145,18 +155,16 @@ class ShopController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function filters()
+    public function filters(Request $request)
     {
-        if(request()->category){
-            $category = Category::where('slug', request()->category)->first();
-            $filters = Featured::with('values')->whereHas('categories', function ($query){
-                $query->where('slug', request()->category);
-            })->get();
-        }else {
-            $filters = Featured::all();
-        }
-        //dd($filters);
-        return response()->json($filters);
+        $filters = $request->filters;
+        $products = Product::with('featureds')->whereHas(function ($query) use ($filters){
+            foreach ($filters as $filter) {
+                $query->where('value', $filter);
+            }
+        })->get();
+        dd($products);
+        //dd($request->filters);
     }
 
 

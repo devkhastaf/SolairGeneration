@@ -25,4 +25,9 @@ class LandingPageController extends Controller
             'slides' => $slides
         ]);
     }
+
+    public function test(Request $request)
+    {
+        dd($request->all());
+    }
 }

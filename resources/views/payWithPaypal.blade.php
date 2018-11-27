@@ -1,14 +1,15 @@
 @extends('layouts.app')
 
 @section('extra-css')
-    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 @endsection
 
 @section('content')
         <div class="checkout">
         <h1>Checkout Page</h1>
         <div class="left">
-            <form action="{{ route('checkout.payWithStripe') }}" method="POST" id="payment-form">
+            <form action="{{ route('checkout.payWithPaypal') }}" method="POST" id="payment-form">
+                {{ csrf_field() }}
                 <div>
                     <input type="hidden" name="email" id="email" value="{{$info['email']}}"><br>
                 </div>
@@ -31,19 +32,7 @@
                     <input type="hidden" name="phone" id="phone" value="{{ $info['phone'] }}"><br>
                 </div>
                 <h3>Payment Details</h3>
-                <div>
-                    <label for="nameoncard">Name on Card</label>
-                    <input type="text" name="nameoncard" id="nameoncard"><br>
-                </div>
-                <label for="card-element">
-                    Credit or debit card
-                </label>
-                <div id="card-element">
-                    <!-- A Stripe Element will be inserted here. -->
-                </div>
-
-                <!-- Used to display form errors. -->
-                <div id="card-errors" role="alert"></div>
+                <div id="paypal-button-container"></div>
                 <button type="submit" class="btn" id="complete-order">Complete Order</button>
             </form>
             <div class="right">
@@ -95,92 +84,71 @@
                 @endif
             </div>
         </div>
-        @endsection
+@endsection
 
-        @section('extra-js')
-            <script>
-                // Create a Stripe client.
-                var stripe = Stripe('pk_test_GqkFp0q3wpAJ37oTC9Cfrn5e');
+@section('extra-js')
+                <script>
 
-                // Create an instance of Elements.
-                var elements = stripe.elements();
+                    // Render the PayPal button
 
-                // Custom styling can be passed to options when creating an Element.
-                // (Note that this demo uses a wider set of styles than the guide below.)
-                var style = {
-                    base: {
-                        color: '#32325d',
-                        lineHeight: '18px',
-                        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                        fontSmoothing: 'antialiased',
-                        fontSize: '16px',
-                        '::placeholder': {
-                            color: '#aab7c4'
+                    paypal.Button.render({
+
+                        // Set your environment
+
+                        env: 'sandbox', // sandbox | production
+
+
+                        locale: 'fr_FR',
+                        // Specify the style of the button
+
+                        style: {
+                            layout: 'vertical',  // horizontal | vertical
+                            size:   'medium',    // medium | large | responsive
+                            shape:  'rect',      // pill | rect
+                            color:  'blue'       // gold | blue | silver | black
+                        },
+
+                        // Specify allowed and disallowed funding sources
+                        //
+                        // Options:
+                        // - paypal.FUNDING.CARD
+                        // - paypal.FUNDING.CREDIT
+                        // - paypal.FUNDING.ELV
+
+                        funding: {
+                            allowed: [ paypal.FUNDING.CARD, paypal.FUNDING.CREDIT ],
+                            disallowed: [ ]
+                        },
+
+                        // PayPal Client IDs - replace with your own
+                        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+
+                        client: {
+                            sandbox:    '{{ Config::get('paypal.client_id') }}',
+                            // production: '<insert production client id>'
+                        },
+
+                        payment: function(data, actions) {
+                            return paypal.request({
+                                method: 'post',
+                                url: '{{ route('checkout.payWithPaypal') }}',
+                                json: {
+                                    _token: "{{ csrf_token() }}"
+                                }
+                            }).then(function () {
+                                console.log(data.id)
+                               return data.id
+                            });
+                        },
+
+                        onAuthorize: function(data, actions) {
+                            return actions.payment.execute().then(function() {
+                                window.alert('Payment Complete!');
+                            });
                         }
-                    },
-                    invalid: {
-                        color: '#fa755a',
-                        iconColor: '#fa755a'
-                    }
-                };
 
-                // Create an instance of the card Element.
-                var card = elements.create('card', {
-                    style: style,
-                    hidePostalCode: true
-                });
+                    }, '#paypal-button-container');
 
-                // Add an instance of the card Element into the `card-element` <div>.
-                card.mount('#card-element');
+                </script>
 
-                // Handle real-time validation errors from the card Element.
-                card.addEventListener('change', function(event) {
-                    var displayError = document.getElementById('card-errors');
-                    if (event.error) {
-                        displayError.textContent = event.error.message;
-                    } else {
-                        displayError.textContent = '';
-                    }
-                });
-
-                // Handle form submission.
-                var form = document.getElementById('payment-form');
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-
-                    //document.getElementById('#complete-order').disable = true;
-
-                    var options = {
-                        name: document.getElementById('name').value,
-                        address_line1: document.getElementById('address').value,
-                        address_city: document.getElementById('city').value,
-                        address_state: document.getElementById('province').value,
-                        address_zip: document.getElementById('zipcode').value
-                    }
-                    stripe.createToken(card, options).then(function(result) {
-                        if (result.error) {
-                            // Inform the user if there was an error.
-                            var errorElement = document.getElementById('card-errors');
-                            errorElement.textContent = result.error.message;
-                            document.getElementById('#complete-order').disable = true;
-                        } else {
-                            // Send the token to your server.
-                            stripeTokenHandler(result.token);
-                        }
-                    });
-                });
-
-                function stripeTokenHandler(token) {
-                    // Insert the token ID into the form so it gets submitted to the server
-                    var form = document.getElementById('payment-form');
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.setAttribute('type', 'hidden');
-                    hiddenInput.setAttribute('name', 'stripeToken');
-                    hiddenInput.setAttribute('value', token.id);
-                    form.appendChild(hiddenInput);
-
-                    // Submit the form
-                    form.submit();
-                }
-            </script>
 @endsection

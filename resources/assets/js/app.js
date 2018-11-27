@@ -15,13 +15,10 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('carousel', require('./components/Carousel.vue'));
-Vue.component('carouselSlide', require('./components/CarouselSlide.vue'));
-/*
-Vue.component('filters', require('./components/Filters.vue'));
-Vue.component('featured', require('./components/Featured.vue'));
-Vue.component('featured-input', require('./components/FeaturedInput.vue'));
-*/
+Vue.component('carousel', require('./components/carousel/Carousel.vue'));
+Vue.component('carouselSlide', require('./components/carousel/CarouselSlide.vue'));
+Vue.component('lightbox', require('./components/lightbox/Lightbox.vue'));
+
 
 const app = new Vue({
     el: '#app'

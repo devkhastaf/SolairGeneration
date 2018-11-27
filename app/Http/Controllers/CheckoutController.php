@@ -9,8 +9,23 @@ use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redirect;
 use Mockery\Exception;
+use PayPal\Api\Amount;
+use PayPal\Api\Details;
+use PayPal\Api\Item;
+use PayPal\Api\ItemList;
+use PayPal\Api\Payer;
+use PayPal\Api\PayerInfo;
+use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
+use PayPal\Api\RedirectUrls;
+use PayPal\Api\Transaction;
+use PayPal\Auth\OAuthTokenCredential;
+use PayPal\Exception\PayPalConnectionException;
+use PayPal\Rest\ApiContext;
 
 class CheckoutController extends Controller
 {
@@ -37,7 +52,7 @@ class CheckoutController extends Controller
     public function pay(Request $request)
     {
         $info = $request->all();
-        if($request->stripe)
+        if($request->mpay == "stripe")
         {
             return view('payWithStripe')->with([
                 'info' => $info,
@@ -46,7 +61,7 @@ class CheckoutController extends Controller
                 'newTax' => $this->getNumbers()->get('newTax'),
                 'newTotal' => $this->getNumbers()->get('newTotal')
             ]);
-        } elseif ($request->paypal)
+        } elseif ($request->mpay == "paypal")
         {
             return view('payWithPaypal')->with([
                 'info' => $info,
@@ -74,7 +89,6 @@ class CheckoutController extends Controller
      */
     public function payWithStripe(Request $request)
     {
-        dd($request);
         $contents = Cart::content()->map(function ($item) {
             return $item->model->slug . ',' . $item->qty;
         })->values()->toJson();
@@ -111,6 +125,107 @@ class CheckoutController extends Controller
     }
 
     /**
+     *
+     *
+     *
+     *
+     *
+     */
+    public function payWithPaypal(Request $request)
+    {
+
+        $apiContext = new ApiContext(new OAuthTokenCredential(
+            Config::get('paypal.client_id'),
+            Config::get('paypal.secret')
+        ));
+
+        $payment = new Payment();
+        $list = new ItemList();
+
+        foreach (Cart::content() as $product){
+            $item = (new Item())
+                    ->setName($product->model->name)
+                    ->setPrice($product->model->price / 100)
+                    ->setDescription($product->model->details)
+                    ->setCurrency('EUR')
+                    ->setQuantity($product->qty);
+            $list->addItem($item);
+
+        }
+
+        $details = (new Details())
+                ->setSubtotal($this->getNumbers()->get('newSubtotalForPaypal') / 100)
+                ->setTax(bcdiv($this->getNumbers()->get('newTax') / 100, 1, 2))
+                ->setGiftWrap($this->getNumbers()->get('discount') / 100);
+
+        $amount = (new Amount())
+                ->setTotal(bcdiv($this->getNumbers()->get('newTotal') / 100, 1, 2))
+                ->setCurrency('EUR')
+                ->setDetails($details);
+
+        //echo $amount;
+        //dd($list);
+
+        $transaction = (new Transaction())
+                    ->setItemList($list)
+                    ->setDescription('Buy from SolairGeneration')
+                    ->setAmount($amount)
+                    ->setCustom('demo-1');
+
+        $payment->setTransactions([$transaction]);
+        $payment->setIntent('sale');
+        $redirectUrls =  (new RedirectUrls())
+            ->setReturnUrl('http://localhost:8000/payWithPaypal')
+            ->setCancelUrl('http://localhost:8000/checkout');
+
+        $payment->setRedirectUrls($redirectUrls);
+        $payer = (new Payer())
+                ->setPaymentMethod('paypal');
+        $payerInfo = (new PayerInfo())
+                    ->setEmail($request->emailpaypal);
+        $payer->setPayerInfo($payerInfo);
+        $payment->setPayer($payer);
+
+        try {
+            $payment->create($apiContext);
+            return response()->json($payment->getId());
+        } catch (PayPalConnectionException $e) {
+            dd($e->getData());
+        }
+
+    }
+
+    /**
+     *
+     *
+     *
+     *
+     */
+    public function paypal(Request $request)
+    {
+        $apiContext = new ApiContext(new OAuthTokenCredential(
+            Config::get('paypal.client_id'),
+            Config::get('paypal.secret')
+        ));
+
+        $payment = Payment::get($request->paymentId, $apiContext);
+        $execution = (new PaymentExecution())
+                    ->setPayerId($request->PayerID)
+                    ->setTransactions($payment->getTransactions());
+
+
+
+        try {
+            $payment->execute($execution, $apiContext);
+            dd($payment);
+        } catch (PayPalConnectionException $e) {
+            var_dump(json_decode($e->getData()));
+        }
+    }
+
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -122,13 +237,15 @@ class CheckoutController extends Controller
         $discount = session()->get('coupon')['discount'] ?? 0;
         $code = session()->get('coupon')['name'] ?? null;
         $newSubtotal = (Cart::subtotal() - $discount);
+        $newSubtotalForPaypal = Cart::subtotal();
         $newTax = $newSubtotal * $tax;
-        $newTotal = $newSubtotal + (1 + $newTax);
+        $newTotal = $newSubtotal +  $newTax;
 
         return collect([
             'discount' => $discount,
             'code' => $code,
             'newSubtotal' => $newSubtotal,
+            'newSubtotalForPaypal' => $newSubtotalForPaypal,
             'newTax' => $newTax,
             'newTotal' => $newTotal
         ]);

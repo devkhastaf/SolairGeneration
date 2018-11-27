@@ -1,0 +1,196 @@
+/**
+ * This injects Tailwind's base styles, which is a combination of
+ * Normalize.css and some additional base styles.
+ *
+ * You can see the styles here:
+ * https://github.com/tailwindcss/tailwindcss/blob/master/css/preflight.css
+ *
+ * If using `postcss-import`, use this import instead:
+ *
+ * @import "tailwindcss/preflight";
+ */
+@tailwind preflight;
+
+/**
+ * This injects any component classes registered by plugins.
+ *
+ * If using `postcss-import`, use this import instead:
+ *
+ * @import "tailwindcss/components";
+ */
+@tailwind components;
+
+.top-nav-item {
+    @apply  .text-blue-darkest .text-sm .mr-4 .font-semibold .pb-4 .border-b-2 .border-solid .border-transparent;
+}
+.top-nav-item:hover {
+    @apply .text-orange .border-orange;
+}
+
+.btn {
+    @apply .font-medium .text-lg .text-blue-darkest .px-3 .py-1 .border-blue-darkest .border-solid .border-2;
+}
+.btn-red {
+    @apply .bg-red .text-white .text-lg .px-3 .py-1 .rounded-full .inline;
+}
+.btn-red:hover {
+    @apply .bg-red-light;
+}
+.btn-blue {
+    @apply .bg-blue .text-white .text-lg .px-4 .py-2 .rounded-full .inline;
+}
+.btn-blue:hover {
+    @apply .bg-blue-light;
+}
+.btn:hover {
+    @apply .text-red-light .border-red-light;
+}
+.btn:focus {
+    @apply .outline-none;
+}
+.pagination {
+    @apply .list-reset .text-center .mt-6;
+}
+.page-item {
+    @apply  .inline .border-blue-darkest .font-semibold .border-solid .border-2 .text-lg .px-4 .py-2 .cursor-pointer .mr-2;
+}
+.active {
+    @apply .text-white .bg-blue-darkest .cursor-default;
+}
+.disabled {
+    @apply .cursor-default .border-blue-darkest;
+}
+
+.page-link
+{
+    a:hover {
+        @apply .text-red-light .border-red-light;
+    }
+}
+
+#notification {
+
+}
+
+a {
+    text-decoration: none;
+    @apply .text-black;
+}
+input:-webkit-autofill {
+    @apply .bg-grey-lighter;
+}
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+.menu_header {
+    @apply .text-blue-darkest .cursor-pointer;
+}
+.fa-chevron-down {
+    font-size: 12px;
+    margin-left: 4px;
+}
+.menu_container {
+    @apply .bg-white .absolute .border-1 .border-solid .shadow-md;
+    opacity: 0;
+    display: none;
+    border-color: #DFDFDF;
+    border-radius: 6px;
+    padding: 8px 0 12px;
+    max-width: 200px;
+    margin: auto;
+    z-index: 999;
+    right: 4rem;
+    transition: all 0.25s ease-in-out;
+}
+.menu_active {
+    opacity: 1;
+    display: block;
+    transform: translateY(12px);
+}
+/* Triangle via cssarrowplease.com */
+.menu_container:after {
+    bottom: 100%;
+    left: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(223, 223, 223, 0);
+    border-bottom-color: #DFDFDF;
+    border-width: 10px;
+    margin-left: -10px;
+}
+/* end Triangle */
+
+.menu_container ul {
+    list-style: none;
+    padding-left: 0;
+}
+.menu_container li {
+    @apply .text-center .cursor-pointer;
+    padding: 10px 16px;
+}
+.menu_container li a:hover {
+    @apply .text-orange;
+}
+.menu_container li:nth-last-child(2) a {
+    border-bottom: 1px solid #DFDFDF;
+}
+.menu_container li:last-child a {
+    color: #ed4f32;
+    padding: 12px 0 6px;
+}
+
+.category .subcategory:last-child {
+    margin-bottom: 2.5rem;
+}
+
+.invalid-feedback {
+    @apply .text-red .block .mt-2;
+}
+/**
+ * Here you would add any of your custom component classes; stuff that you'd
+ * want loaded *before* the utilities so that the utilities could still
+ * override them.
+ *
+ * Example:
+ *
+ * .btn { ... }
+ * .form-input { ... }
+ *
+ * Or if using a preprocessor or `postcss-import`:
+ *
+ * @import "components/buttons";
+ * @import "components/forms";
+ */
+
+/**
+ * This injects all of Tailwind's utility classes, generated based on your
+ * config file.
+ *
+ * If using `postcss-import`, use this import instead:
+ *
+ * @import "tailwindcss/utilities";
+ */
+@tailwind utilities;
+
+/**
+ * Here you would add any custom utilities you need that don't come out of the
+ * box with Tailwind.
+ *
+ * Example :
+ *
+ * .bg-pattern-graph-paper { ... }
+ * .skew-45 { ... }
+ *
+ * Or if using a preprocessor or `postcss-import`:
+ *
+ * @import "utilities/background-patterns";
+ * @import "utilities/skew-transforms";
+ */

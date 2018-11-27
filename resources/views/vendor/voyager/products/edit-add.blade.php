@@ -59,7 +59,7 @@
 @stop
 
 @section('content')
-    <div class="page-content container-fluid" id="application">
+    <div class="page-content container-fluid" id="app">
         <form role="form"
               class="form-edit-add"
               action="@if(!is_null($dataTypeContent->getKey())){{ route('voyager.'.$dataType->slug.'.update', $dataTypeContent->getKey()) }}@else{{ route('voyager.'.$dataType->slug.'.store') }}@endif"
@@ -152,7 +152,20 @@
                         </div>
 
                         <div class="panel-body" id="featuredsContainer">
-                            <button type="submit" id="add-featured" class="btn btn-primary pull-left">Add Featured</button>
+                            <span style="border: 2px solid green; padding: 1rem 2rem; cursor: pointer;" id="add-feature">Add feature</span>
+                            <div style="margin-top: 2rem;" class="feature-form">
+                                <select name="feature_id[]">
+                                    @foreach($allCategories as $category)
+                                            <optgroup label="{{ $category->name }}">
+                                                @foreach($category->featureds as $featured)
+                                                    <option value="{{ $featured->slug }}">{{ $featured->name }}</option>
+                                                @endforeach
+                                            </optgroup>
+                                    @endforeach
+                                </select>
+                                <input type="text" name="value_feature[]" placeholder="Value of feature"/>
+                                <span onclick="$(this).parent().remove()" class="feature_delete" style="border: 2px solid red; padding: 1rem 2rem; cursor: pointer;">Delete</span>
+                            </div>
                         </div>
                     </div><!-- .panel -->
 
@@ -174,7 +187,7 @@
                                        {{!! isFieldSlugAutoGenerator($dataType, $dataTypeContent, "slug") !!}}
                                        value="@if(isset($dataTypeContent->slug)){{ $dataTypeContent->slug }}@endif">
                             </div>
-                            <div class="form-group>
+                            <div class="form-group">
                                 <label for="featured">Featrued</label>
                                 @php
                                     $dataTypeRows = $dataType->{(isset($dataTypeContent->id) ? 'editRows' : 'addRows' )};
@@ -197,7 +210,13 @@
                         <div class="panel-body">
                             <ul>
                                 @foreach($allCategories as $category)
-                                    <li><label><input v-bind="categories" type="checkbox" value="{{ $category->id }}" name="categories[]" {{ $categoriesForProduct->contains($category) ? 'checked' : '' }}>{{ $category->name }}</label></li>
+                                    <li><label><input data-id="{{ $category->id }}" type="checkbox" class="category" value="{{ $category->id }}" name="categories[]" {{ $categoriesForProduct->contains($category) ? 'checked' : '' }}>{{ $category->name }}</label>
+                                        <ul>
+                                            @foreach($category->featureds as $featured)
+                                                <li>{{ $featured->name }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
                                 @endforeach
                             </ul>
                         </div>
@@ -242,7 +261,9 @@
             <button type="submit" class="btn btn-primary pull-left">
                 @if(isset($dataTypeContent->id)) Update @else <i class="icon wb-plus-circle"></i> Add @endif
             </button>
+            </div>
         </form>
+    </div>
         <iframe id="form_target" name="form_target" style="display:none"></iframe>
         <form id="my_form" action="{{ route('voyager.upload') }}" target="form_target" method="post"
                enctype="multipart/form-data" style="width:0;height:0;overflow:hidden">
@@ -279,7 +300,11 @@
 @stop
 
 @section('javascript')
+    <script src="/js/axios.js"></script>
     <script>
+        //window.axios.defaults.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
+        window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        //window.axios.defaults.headers.common['Authorization'] = 'Bearer' + Laravel.apiToken;
         var params = {}
         var $image
 
@@ -339,21 +364,29 @@
             var price = $('input[name="price"]').val();
             $('input[name="price"]').val(price / 100);
 
-            $('#add-featured').click(function (e) {
-                e.preventDefault();
-                $('#featuredsContainer').append("<h1>It's work</h1>");
-                $categories = $('input[name=categories]');
-                console.log($categories);
-            })
-
+            $('#add-feature').click(function (e) {
+                $('#featuredsContainer').append($('.feature-form').first().clone());
+            });
         });
-    </script>
-    <script>
-        new Vue({
-            el:'#application',
-            data: {
-                categories: []
-            }
-        })
+
+        (function () {
+            let categories = [];
+            const category = document.querySelectorAll('.category');
+
+
+            Array.from(category).forEach(function (element) {
+                if (element.checked) {
+                    categories.push(element.getAttribute('data-id'))
+                }
+                element.addEventListener('change', function () {
+                    categories = []
+                    Array.from(category).forEach(function (e) {
+                        if (e.checked) {
+                            categories.push(e.getAttribute('data-id'))
+                        }
+                    })
+                })
+            })
+        })()
     </script>
 @stop

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 
-class OrdersController extends Controller
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,12 +14,7 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        $orders = auth()->user()->orders()->with('products')->paginate(10)->get();
-        $user = auth()->user();
-        return view('my-orders')->with([
-            'orders' => $orders,
-            'user' => $user
-        ]);
+        //
     }
 
     /**
@@ -73,7 +67,33 @@ class OrdersController extends Controller
      */
     public function update(Request $request)
     {
-        //
+        //dd($request->all());
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.auth()->id(),
+            'password' => 'sometimes|nullable|string|min:6|confirmed',
+            'avatar' => 'sometimes|nullable|file|max:1024',
+        ]);
+        $user = auth()->user();
+        //Upload the image and resize it
+        if($request->avatar){
+            $file = $request->avatar;
+            $avatar_name =time().'.'.$file->getClientOriginalExtension();
+            $avatar = Image::make($file);
+            $avatar->resize(256, 256);
+            $avatar->save('storage/users/'.$avatar_name);
+            $user->avatar = 'users/' . $avatar_name;
+        }
+        $input = $request->except('password', 'password_confirmation');
+        if(! $request->filled('password')){
+            $user->fill($input)->save();
+
+            return back()->with('success_message', 'Profile updated successfully!');
+        }
+        $user->password = bcrypt($request->password);
+        $user->fill($input)->save();
+        return back()->with('success_message', 'Profile (and password) updated successfully!');
+
     }
 
     /**

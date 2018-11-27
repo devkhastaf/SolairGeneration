@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -14,7 +15,12 @@ class CartController extends Controller
      */
     public function index()
     {
-        return view('cart');
+        return view('cart')->with([
+            'discount' => $this->getNumbers()->get('discount'),
+            'newSubtotal' => $this->getNumbers()->get('newSubtotal'),
+            'newTax' => $this->getNumbers()->get('newTax'),
+            'newTotal' => $this->getNumbers()->get('newTotal')
+        ]);
     }
 
     /**
@@ -79,7 +85,19 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'quantity' => 'required|numeric|between:1,5'
+        ]);
+
+        if($validator->fails()){
+            session()->flash('error', collect(['Quantity must between 1 and 5.']));
+            return response()->json(['success' => false], 400);
+        }
+
+        Cart::update($id, $request->quantity);
+
+        session()->flash('success_message', 'Quantity was updated successfully!');
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -119,5 +137,25 @@ class CartController extends Controller
             ->associate('App\Product');
         return redirect()->route('cart.index')->with('success_message', 'Item has been Saved For Later');
 
+    }
+
+    private function getNumbers()
+    {
+        $tax = config('cart.tax') / 100;
+        $discount = session()->get('coupon')['discount'] ?? 0;
+        $code = session()->get('coupon')['name'] ?? null;
+        $newSubtotal = (Cart::subtotal() - $discount);
+        $newSubtotalForPaypal = Cart::subtotal();
+        $newTax = $newSubtotal * $tax;
+        $newTotal = $newSubtotal +  $newTax;
+
+        return collect([
+            'discount' => $discount,
+            'code' => $code,
+            'newSubtotal' => $newSubtotal,
+            'newSubtotalForPaypal' => $newSubtotalForPaypal,
+            'newTax' => $newTax,
+            'newTotal' => $newTotal
+        ]);
     }
 }

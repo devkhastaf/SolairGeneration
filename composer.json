@@ -19,6 +19,7 @@
         "laravel/tinker": "^1.0",
         "nicolaslopezj/searchable": "^1.10",
         "paypal/rest-api-sdk-php": "^1.13",
+        "spatie/laravel-newsletter": "^4.2",
         "tcg/voyager": "^1.1"
     },
     "require-dev": {

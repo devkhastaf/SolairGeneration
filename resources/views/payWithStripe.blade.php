@@ -9,6 +9,7 @@
         <h1>Checkout Page</h1>
         <div class="left">
             <form action="{{ route('checkout.payWithStripe') }}" method="POST" id="payment-form">
+                {{ csrf_field() }}
                 <div>
                     <input type="hidden" name="email" id="email" value="{{$info['email']}}"><br>
                 </div>

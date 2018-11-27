@@ -39,7 +39,7 @@ class Product extends Model
 
     public function orders()
     {
-        return $this->hasMany('App\Order','product_id', 'order_id', 'order_product');
+        return $this->belongsToMany('App\Order','order_product', 'product_id', 'order_id');
     }
 
     public function featureds(){
