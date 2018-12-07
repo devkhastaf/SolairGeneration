@@ -15,7 +15,7 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        $orders = auth()->user()->orders()->with('products')->paginate(10)->get();
+        $orders = auth()->user()->orders()->with('products')->paginate(10);
         $user = auth()->user();
         return view('my-orders')->with([
             'orders' => $orders,

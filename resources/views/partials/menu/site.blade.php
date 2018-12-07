@@ -12,7 +12,7 @@
         @guest
             <i class="fa fa-user"></i> 
         @else
-            <img class="rounded-full w-8 h-8" style="position: absolute; top: 20px; right: 7rem;" src="storage/{{ Auth::user()->avatar }}">
+            <img class="rounded-full w-8 h-8 border-blue border-1 border-solid" style="position: absolute; top: 20px; right: 7rem;" src="storage/{{ Auth::user()->avatar }}">
         @endguest    
             <i class="fa fa-chevron-down"></i>
     </div>

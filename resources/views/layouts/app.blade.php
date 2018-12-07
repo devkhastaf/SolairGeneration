@@ -21,8 +21,8 @@
     </div>
     <div class="bg-black"><!--End Footer-->
         <div class="container mx-auto py-8">
-            <div class="grid grid-columns-12 px-8 py-3">
-                <div class="col-span-6">
+            <div class="lg:grid lg:grid-columns-12 md:grid md:grid-columns-12 px-8 py-3">
+                <div class="lg:col-span-6 md:col-span-6">
                     {{ menu('footer', './partials.menu.footer') }}
                     <div class="">
                         <div class="font-semibold text-2xl mb-4 text-white">Paimment</div>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="col-span-1"></div>
-                <div class="col-span-5 float-right">
+                <div class="lg:col-span-5 lg:float-right md:col-span-5 md:float-right">
                     <div class="bg-blue-darkest py-4 px-4 rounded">
                         <div class="text-white text-2xl font-semibold mb-4">Join to our Newslater</div>
                         <span class="text-white">Tempor incididunt ut labore et dolore magna aliqua.</span>
@@ -71,18 +71,17 @@
             'csrfToken' => csrf_token(),
             'apiToken' => auth()->user()->api_token ?? null,
         ]) !!};
-        let notification_close = document.getElementById('notification-close');
-        let notification = document.getElementById('notification');
-        /*notification_close.addEventListener('click', function (e) {
-            notification.remove();
-        })
-        */
-        //$('#notification').fadeOut();
+        
+        
     </script>
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('extra-js')
     <script>
         $(document).ready(function () {
+            $('#notification-close').click(function() {
+                $('#notification').fadeOut();
+            });
+            setTimeout("$('#notification').fadeOut();", 8000);
             let menuHeader = document.querySelector('.menu_header')
             let menuContainer = document.querySelector('.menu_container')
 

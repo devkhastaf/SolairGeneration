@@ -29,14 +29,6 @@
                             @endforeach
                         @endforeach
                         {{ $orders->links() }}
-                        <div class="pagination text-center mt-6 py-6">
-                            <span class="btn-pagination"><</span>
-                            <span class="btn-pagination-active">1</span>
-                            <span class="btn-pagination">2</span>
-                            <span class="btn-pagination">3</span>
-                            <span class="btn-pagination">4</span>
-                            <span class="btn-pagination-disable">></span>
-                        </div>
                     </div>
                 </div>
             </div>

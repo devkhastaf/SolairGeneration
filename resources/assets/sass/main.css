@@ -36,6 +36,12 @@
 .btn-red:hover {
     @apply .bg-red-light;
 }
+.btn-green {
+    @apply .bg-green .text-white .text-lg .px-4 .py-2 .rounded-full .inline;
+}
+.btn-green:hover {
+    @apply .bg-green-light;
+}
 .btn-blue {
     @apply .bg-blue .text-white .text-lg .px-4 .py-2 .rounded-full .inline;
 }

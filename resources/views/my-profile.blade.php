@@ -14,25 +14,29 @@
                     @csrf
                     <div class="grid grid-columns-12 my-6 text-left" style="grid-gap: 2rem;">
                         <div class="col-span-8 border-r-1 border-solid border-blue-darkest">
-                            <div>
-                                <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="Name" required autofocus>
+                            <div class="pr-4 mb-4">
+                                <label class="font-semibold text-blue-darkest" for="name">Name</label>
+                                <input class="bg-grey-lighter font-semibold w-full border-balck border-1 border-solid py-2 px-2 my-2" id="name" type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="Name" required autofocus>
                             </div>
-                            <div>
-                                <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email" required>
+                            <div class="pr-4 mb-4">
+                                <label class="font-semibold text-blue-darkest" for="email">Email</label>
+                                <input class="bg-grey-lighter font-semibold w-full border-balck border-1 border-solid py-2 px-2 my-2" id="email" type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email" required>
                             </div>
-                            <div>
-                                <input id="password" type="password" name="password" value="" placeholder="Password">
-                                <div>Leave password blank to keep current password</div>
+                            <div class="pr-4 mb-4">
+                                <label class="font-semibold text-blue-darkest" for="password">Password</label>
+                                <input class="bg-grey-lighter font-semibold w-full border-balck border-1 border-solid py-2 px-2 my-2" id="password" type="password" name="password" value="" placeholder="Password">
+                                <div class="ml-2 text-blue-darkest">Leave password blank to keep current password</div>
                             </div>
-                            <div>
-                                <input id="password_confirmation" type="password" name="password_confirmation" value="" placeholder="Confirm Password">
+                            <div class="pr-4 mb-4">
+                                <label class="font-semibold text-blue-darkest" for="password_confirmation">Confirm Password</label>
+                                <input class="bg-grey-lighter font-semibold w-full border-balck border-1 border-solid py-2 px-2 my-2" id="password_confirmation" type="password" name="password_confirmation" value="" placeholder="Confirm Password">
                             </div>
-                            <div>
+                            <div class="my-4">
                                 <button type="submit" class="btn-blue">Update profile</button>
                             </div>
                         </div>
                         <div class="col-span-4">
-                            <img src="storage/{{ $user->avatar }}">
+                            <img class="rounded-full border-blue border-1 border-solid" src="storage/{{ $user->avatar }}">
                             <div class="my-4">
                                 <input id="avatar" type="file" name="avatar">
                             </div>

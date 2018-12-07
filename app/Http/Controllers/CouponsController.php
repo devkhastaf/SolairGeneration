@@ -20,7 +20,7 @@ class CouponsController extends Controller
         $coupon = Coupon::where('code', $request->get('coupon_code'))->first();
 
         if(!$coupon){
-            return redirect()->route('cart.index')->withErrors('Invalid coupon code. Please try again');
+            return redirect()->route('checkout.index')->withErrors('Invalid coupon code. Please try again');
         }
         session()->put('coupon', [
             'name' => $coupon->code,

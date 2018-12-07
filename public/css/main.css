@@ -724,6 +724,22 @@ table {
   background-color: #ff7761;
 }
 
+.btn-green {
+  background-color: #38c172;
+  color: #fff;
+  font-size: 1.125rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  border-radius: 9999px;
+  display: inline;
+}
+
+.btn-green:hover {
+  background-color: #51d88a;
+}
+
 .btn-blue {
   background-color: #3490dc;
   color: #fff;

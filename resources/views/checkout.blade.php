@@ -137,7 +137,7 @@
                             </div>
                         </div>
                         <div class="lg:text-left my-4">
-                            <button type="submit" class="btn-red">Checkout</button>
+                            <button type="submit" class="btn-green">Checkout</button>
                         </div>
                     </form>
                 </div>
@@ -189,7 +189,7 @@
                                                class="bg-grey-light h-8 px-4 py-2 text-xs w-48 my-4 rounded-full focus:outline-none focus:border-blue border-2 border-transparent"
                                                placeholder="Coupon code">
                                         <button type="submit"
-                                                class="btn-red text-white ml-2 hover:bg-blue hover:text-white">Apply
+                                                class="btn-blue text-white ml-2 hover:bg-blue hover:text-white">Apply
                                         </button>
                                     </form>
                                 </div>

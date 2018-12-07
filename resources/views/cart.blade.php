@@ -96,7 +96,7 @@
             </div>
             @if(Cart::count() > 0)
                 <div class="py-4">
-                    <a href="{{ route('checkout.index') }}" class="btn-blue">Proced to checkout</a>
+                    <a href="{{ route('checkout.index') }}" class="btn-green">Proced to checkout</a>
                 </div>
             @endif
     <div class="col-span-8 bg-white mt-4 p-4 shadow-md rounded-lg">

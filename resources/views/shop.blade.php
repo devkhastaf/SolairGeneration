@@ -51,10 +51,6 @@
                                 <a href="{{  route('shop.index', ['category' => request()->category, 'sort' => 'low_hight']) }}" class="{{ request()->sort == 'low_hight' ? 'font-semibold' : ''}} mr-2 hover:text-red-light">Low to Hight</a>
                                 <a href="{{  route('shop.index', ['category' => request()->category, 'sort' => 'hight_low']) }}" class="{{ request()->sort == 'hight_low' ? 'font-semibold' : ''}} hover:text-red-light">Hight to Low</a>
                             </div>
-                            <div class="flex-1 text-right">
-                                <a href="#" class="hover:text-red-light mr-1"><i class="fa fa-list"></i></a>
-                                <a href="#" class="hover:text-red-light text-orange"><i class="fa fa-th"></i></a>
-                            </div>
                         </div>
                     </div>
                     <div class="grid grid-columns-4 grid-gap-4 mb-6" style="grid-gap: 2rem;">
@@ -90,7 +86,7 @@
                         @endforelse
                     </div>
                     <div class="mt-10">
-                        {{ $products->links() }}
+                        {{ $products->appends(request()->input())->links() }}
                     </div>
                 </div>
             </div>
